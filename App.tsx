@@ -1,8 +1,11 @@
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "./src/styles/global.css"
-import { Teste } from "@/components/teste";
+import NavigationRoutes from "@/routes";
 
 export default function App() {
   return (
-    <Teste />
+    <GestureHandlerRootView className="flex-1">
+      <NavigationRoutes />
+    </GestureHandlerRootView>
   );
 }
