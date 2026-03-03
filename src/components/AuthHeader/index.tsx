@@ -2,14 +2,14 @@ import { useKeyboardVisible } from "@/shared/hooks/useKeyboardVisible";
 import clsx from "clsx";
 import { Image, View } from "react-native";
 
-type AuthHeaderSize = 'min-h-[370px]' | 'min-h-[400px]';
+type AuthHeaderSize = 'min-h-[330px]' | 'min-h-[400px]';
 
 interface AuthHeaderProps {
     minSize?: AuthHeaderSize
 }
 
 export const AuthHeader = ({
-    minSize = 'min-h-[370px]'
+    minSize = 'min-h-[330px]'
 }: AuthHeaderProps) => {
 
     const isKeyboardVisible = useKeyboardVisible();
