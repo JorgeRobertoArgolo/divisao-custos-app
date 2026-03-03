@@ -4,9 +4,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { Input } from "@/components/Input";
 import { schema } from "./schema";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, View } from "react-native";
 import { AuthHeader } from "@/components/AuthHeader";
 import { AuthButton } from '@/components/AuthButton';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { PublicStackParamsList } from '@/routes/PublicRoutes';
 
 export interface FormLoginParams {
     email: string;
@@ -26,6 +28,8 @@ export const LoginForm = () => {
         },
         resolver: yupResolver(schema),
     });
+
+    const navigation = useNavigation<NavigationProp<PublicStackParamsList>>();
     
     return (
         <SafeAreaView className="bg-gray-700 flex-1" edges={['top']}>
@@ -60,13 +64,11 @@ export const LoginForm = () => {
 
                 <View className='border-t-gray-600 border-t w-auto mx-8' />
                 
-                <TouchableOpacity>
-                    <Text className='text-center justify-center color-gray-200 font-inter text-sm mt-8 mb-4'>
-                        Ainda não tem cadastro ?
-                    </Text>
-                </TouchableOpacity>
+                <Text className='text-center justify-center color-gray-200 font-inter text-sm mt-8 mb-4'>
+                    Ainda não tem cadastro ?
+                </Text>
 
-                <AuthButton className='mb-10' type='secondary'>
+                <AuthButton className='mb-10' type='secondary' onPress={() => navigation.navigate('Register')}>
                     Criar Conta
                 </AuthButton>
             </View> 
