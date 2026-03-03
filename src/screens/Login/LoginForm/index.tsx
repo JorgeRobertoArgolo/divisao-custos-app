@@ -4,8 +4,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { Input } from "@/components/Input";
 import { schema } from "./schema";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { AuthHeader } from "@/components/AuthHeader";
+import { AuthButton } from '@/components/AuthButton';
 
 export interface FormLoginParams {
     email: string;
@@ -53,6 +54,21 @@ export const LoginForm = () => {
                     />
                 </View>
 
+                <AuthButton className='my-8'>
+                    Entrar
+                </AuthButton>
+
+                <View className='border-t-gray-600 border-t w-auto mx-8' />
+                
+                <TouchableOpacity>
+                    <Text className='text-center justify-center color-gray-200 font-inter text-sm mt-8 mb-4'>
+                        Ainda não tem cadastro ?
+                    </Text>
+                </TouchableOpacity>
+
+                <AuthButton className='mb-10' type='secondary'>
+                    Criar Conta
+                </AuthButton>
             </View> 
         </SafeAreaView> 
     );

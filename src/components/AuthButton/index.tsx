@@ -1,0 +1,33 @@
+import { FC, PropsWithChildren } from "react";
+import { Text, TouchableOpacity, TouchableOpacityProps } from "react-native";
+import clsx from "clsx";
+
+type AuthButtonType = 'primary' | 'secondary'
+
+interface AuthButtonParams  extends TouchableOpacityProps{
+    type?: AuthButtonType
+}
+
+export const AuthButton: FC<PropsWithChildren<AuthButtonParams>>  = ({
+    children,
+    type = 'primary',
+    className,
+}: AuthButtonParams) => {
+
+    const isPrimary = type === 'primary';
+
+    return (
+        <TouchableOpacity className={clsx(
+            className, 
+            'justify-center items-center py-3 px-4 m-1 rounded-full w-auto mx-8',
+            isPrimary ? 'bg-green-base' : 'bg-gray-600'
+        )}>
+            <Text className={clsx(
+                "text-md font-inter font-semibold ", 
+                isPrimary ? 'color-gray-800' : 'color-gray-200'
+            )}>
+                {children}
+            </Text>
+        </TouchableOpacity>
+    );
+}
