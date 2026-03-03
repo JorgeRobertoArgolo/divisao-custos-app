@@ -9,11 +9,7 @@ import { AuthHeader } from "@/components/AuthHeader";
 import { AuthButton } from '@/components/AuthButton';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { PublicStackParamsList } from '@/routes/PublicRoutes';
-
-export interface FormLoginParams {
-    email: string;
-    password: string;
-}
+import { UserLoginRequestDTO } from '@/interfaces/auth/request/user-login-request-dto';
 
 export const LoginForm = () => {
     
@@ -21,7 +17,7 @@ export const LoginForm = () => {
         control,
         handleSubmit,
         formState: { isSubmitting }
-    } = useForm<FormLoginParams>({
+    } = useForm<UserLoginRequestDTO>({
         defaultValues: {
             email: '',
             password: ''

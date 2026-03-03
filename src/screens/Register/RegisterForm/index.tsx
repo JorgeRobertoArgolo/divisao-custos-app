@@ -9,12 +9,7 @@ import { AuthHeader } from "@/components/AuthHeader";
 import { AuthButton } from '@/components/AuthButton';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { PublicStackParamsList } from '@/routes/PublicRoutes';
-
-export interface FormRegisterParams {
-    fullName: string;
-    email: string;
-    password: string;
-}
+import { UserRegisterRequestDTO } from '@/interfaces/auth/request/user-register-request-dto';
 
 export const RegisterForm = () => {
     
@@ -22,7 +17,7 @@ export const RegisterForm = () => {
         control,
         handleSubmit,
         formState: { isSubmitting }
-    } = useForm<FormRegisterParams>({
+    } = useForm<UserRegisterRequestDTO>({
         defaultValues: {
             fullName: '',
             email: '',
