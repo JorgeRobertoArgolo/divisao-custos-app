@@ -4,12 +4,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { Input } from "@/components/Input";
 import { schema } from "./schema";
-import { Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import { AuthHeader } from "@/components/AuthHeader";
 import { AuthButton } from '@/components/AuthButton';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { PublicStackParamsList } from '@/routes/PublicRoutes';
 import { UserLoginRequestDTO } from '@/interfaces/auth/request/user-login-request-dto';
+import { useAuthContext } from '@/context/auth.context';
+import { colors } from '@/shared/colors';
 
 export const LoginForm = () => {
     
@@ -26,6 +28,16 @@ export const LoginForm = () => {
     });
 
     const navigation = useNavigation<NavigationProp<PublicStackParamsList>>();
+
+    const { handleAuthenticate } = useAuthContext();
+    
+    const onSubmit = async(userData: UserLoginRequestDTO) => {
+        try {
+            await handleAuthenticate(userData);
+        } catch (error) {
+            console.log("Erro no form de login", error);
+        }
+    }
     
     return (
         <SafeAreaView className="bg-gray-700 flex-1" edges={['top']}>
@@ -54,8 +66,10 @@ export const LoginForm = () => {
                     />
                 </View>
 
-                <AuthButton className='my-8'>
-                    Entrar
+                <AuthButton className='my-8' onPress={handleSubmit(onSubmit)}>
+                    {
+                        isSubmitting ? <ActivityIndicator color={colors.white} /> : 'Login'
+                    }
                 </AuthButton>
 
                 <View className='border-t-gray-600 border-t w-auto mx-8' />
