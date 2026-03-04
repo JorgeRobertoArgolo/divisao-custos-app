@@ -15,7 +15,7 @@ export const PrivateRoutes = () => {
     return (
         <PrivateBottomTabs.Navigator
             screenOptions={{
-                headerShown: true
+                headerShown: false,
             }}    
             initialRouteName='Atividades'
         >
