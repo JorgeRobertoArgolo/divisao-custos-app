@@ -12,6 +12,7 @@ import { PublicStackParamsList } from '@/routes/PublicRoutes';
 import { UserLoginRequestDTO } from '@/interfaces/auth/request/user-login-request-dto';
 import { useAuthContext } from '@/context/auth.context';
 import { colors } from '@/shared/colors';
+import { useErrorHandler } from '@/shared/hooks/useErrorHandler';
 
 export const LoginForm = () => {
     
@@ -31,11 +32,13 @@ export const LoginForm = () => {
 
     const { handleAuthenticate } = useAuthContext();
     
+    const { handleError } = useErrorHandler();
+    
     const onSubmit = async(userData: UserLoginRequestDTO) => {
         try {
             await handleAuthenticate(userData);
         } catch (error) {
-            console.log("Erro no form de login", error);
+            handleError(error, 'Erro ao autenticar.Verifique suas credenciais');
         }
     }
     
@@ -66,7 +69,7 @@ export const LoginForm = () => {
                     />
                 </View>
 
-                <AuthButton className='my-8' onPress={handleSubmit(onSubmit)}>
+                <AuthButton className='my-8' onPress={handleSubmit(onSubmit)} disabled={isSubmitting}>
                     {
                         isSubmitting ? <ActivityIndicator color={colors.white} /> : 'Login'
                     }
