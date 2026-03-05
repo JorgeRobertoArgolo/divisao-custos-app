@@ -62,7 +62,10 @@ export const AddNewAtividadeModal: FC<Params> = ({
                                         placeholder="Título"
                                     />
                                     
-                                    <InputDate />
+                                    <InputDate 
+                                        control={control}
+                                        name="date"
+                                    />
                                 </View>
 
                                 <AuthButton
