@@ -24,6 +24,7 @@ export const AuthButton: FC<PropsWithChildren<AuthButtonParams>>  = ({
                 'justify-center items-center py-3 px-4 m-1 rounded-full w-auto mx-8',
                 isPrimary ? 'bg-green-base' : 'bg-gray-600'
              )}
+             activeOpacity={0.8}
              {...rest}
         >
             <Text className={clsx(

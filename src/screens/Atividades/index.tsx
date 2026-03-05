@@ -2,6 +2,7 @@ import { Text, View } from "react-native";
 import { MainHeader } from "@/components/MainHeader";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { EmptyList } from "./EmptyList";
+import { FloatingButton } from "@/components/FloatingButton";
 
 export const Atividades = () => {
     return (
@@ -22,6 +23,10 @@ export const Atividades = () => {
                     </Text>
                 </View>
                 <EmptyList />
+                
+                <FloatingButton iconName="add">
+                    Criar
+                </FloatingButton>
             </View>
         </SafeAreaView>
     );
