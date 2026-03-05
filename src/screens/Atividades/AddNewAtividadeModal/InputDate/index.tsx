@@ -31,7 +31,7 @@ export const InputDate = () => {
                     size={20}
                     color={colors.gray[300]}
                 />
-                <Text className="ml-3 text-lg text-gray-200">
+                <Text className="ml-3 text-md text-gray-400 font-normal font-inter">
                     {formatDate(date)|| 'Data'}
                 </Text>
             </TouchableOpacity>

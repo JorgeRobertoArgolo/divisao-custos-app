@@ -58,7 +58,7 @@ export const Input = <T extends FieldValues> ({
                             <TextInput
                                 value={value}
                                 onChangeText={onChange}
-                                className='flex-1 text-base text-white '
+                                className='flex-1 text-md text-white '
                                 placeholderTextColor={colors.gray[400]}
                                 {...rest}
                                 ref={inputRef}
