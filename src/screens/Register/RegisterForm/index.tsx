@@ -45,7 +45,7 @@ export const RegisterForm = () => {
         <SafeAreaView className="bg-gray-700 flex-1" edges={['top']}>
             <AuthHeader />
 
-            <View className="flex-1">
+            <View className="flex-1 mx-8">
                 
                 <Text className="font-inter color-gray-100 text-center mt-10 mb-8 text-lg-label font-semibold">
                     Crie sua conta
