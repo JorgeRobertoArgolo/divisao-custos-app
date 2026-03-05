@@ -3,8 +3,19 @@ import { MainHeader } from "@/components/MainHeader";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { EmptyList } from "./EmptyList";
 import { FloatingButton } from "@/components/FloatingButton";
+import { useState } from "react";
+import { AddNewAtividadeModal } from "./AddNewAtividadeModal";
 
 export const Atividades = () => {
+
+    const [loading, setLoading] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    
+    const showModal = () => setModalVisible(true);
+    const hideModal = () => setModalVisible(false);
+
+    const handleAddNewAtividade = () => {}
+
     return (
         <SafeAreaView className="bg-gray-700 flex-1 " edges={['top']}>
             <View className="flex-1 mx-6 mt-10 mb-6">
@@ -24,10 +35,17 @@ export const Atividades = () => {
                 </View>
                 <EmptyList />
                 
-                <FloatingButton iconName="add">
+                <FloatingButton iconName="add" onPress={() => showModal()}>
                     Criar
                 </FloatingButton>
             </View>
+
+            <AddNewAtividadeModal 
+                handleAddNewAtividade={handleAddNewAtividade}
+                hideModal={hideModal}
+                loading={loading}
+                visible={modalVisible}   
+            />
         </SafeAreaView>
     );
 }
