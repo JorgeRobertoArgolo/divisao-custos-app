@@ -88,4 +88,97 @@ O projeto segue princípios de Clean Architecture adaptados para o frontend:
         for each row execute procedure public.handle_new_user();
         $$;
     ```
+    **2.3. Criação das tabelas de negócio e RLS (Participantes, Atividades e Despesas):**
     
+    ```sql
+    -- Tabela de participantes
+    create table participants (
+        id uuid default gen_random_uuid() primary key,
+        user_id uuid references auth.users(id) on delete cascade not null default auth.uid(),
+        name text not null,
+        created_at timestamp with time zone default timezone('utc'::text, now()) not null
+    );
+
+    alter table participants enable row level security;
+
+    create policy "Usuários gerenciam seus próprios participantes"
+    on participants for all
+    using ( auth.uid() = user_id );
+
+    -- Tabela de atividades
+    create table activities (
+        id uuid default gen_random_uuid() primary key,
+        user_id uuid references auth.users(id) on delete cascade not null default auth.uid(),
+        title text not null,
+        date date not null,
+        created_at timestamp with time zone default timezone('utc'::text, now()) not null
+    );
+
+    alter table activities enable row level security;
+
+    create policy "Usuários gerenciam suas próprias atividades"
+    on activities for all
+    using ( auth.uid() = user_id );
+
+    -- Tabela de despesas
+    create table expenses (
+        id uuid default gen_random_uuid() primary key,
+        activity_id uuid references activities(id) on delete cascade not null,
+        title text not null,
+        amount numeric(10, 2) not null,
+        created_at timestamp with time zone default timezone('utc'::text, now()) not null
+    );
+
+    alter table expenses enable row level security;
+
+    create policy "Usuários acessam despesas de suas atividades"
+    on expenses for all
+    using (
+        activity_id in (
+            select id from activities where user_id = auth.uid()
+        )
+    );
+
+    -- Tabela de relacionamento (Despesa <-> Participante)
+    create table expense_participants (
+        expense_id uuid references expenses(id) on delete cascade not null,
+        participant_id uuid references participants(id) on delete cascade not null,
+        is_paid boolean default false not null,
+        primary key (expense_id, participant_id) 
+    );
+
+    alter table expense_participants enable row level security;
+
+    create policy "Usuários gerenciam pagamentos de suas despesas"
+    on expense_participants for all
+        using (
+        expense_id in (
+            select e.id from expenses e
+            join activities a on a.id = e.activity_id
+            where a.user_id = auth.uid()
+        )
+    );
+    ```
+
+3. **Configuração de Variáveis de Ambiente:**
+
+Crie um arquivo .env.local na raiz do projeto com as credenciais do seu Supabase:
+
+```.env.local
+EXPO_PUBLIC_SUPABASE_URL=sua_url_aqui
+EXPO_PUBLIC_SUPABASE_ANON_KEY=sua_key_aqui
+```
+4. **Instalação e Execução:**
+
+```bash
+# Instale as dependências
+npm install
+
+# Crie os arquivos nativos
+npx expo prebuild 
+
+# Rode o projeto
+npx expo run:android
+# ou
+npx expo run:ios
+```
