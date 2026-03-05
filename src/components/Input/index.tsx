@@ -39,7 +39,7 @@ export const Input = <T extends FieldValues> ({
             render={({ field: { onChange, value }, fieldState: { error } }) =>{
                 return (
                     <View 
-                        className='bg-gray-800 mx-8' 
+                        className='bg-gray-800' 
                     >
                         <TouchableOpacity 
                             className={clsx(`flex-row justify-between items-center border-solid border-[1px] h-16 py-2 px-3 rounded-lg`, isFocused ? 'border-white/90' : 'border-gray-800')}

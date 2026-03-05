@@ -21,7 +21,7 @@ export const AuthButton: FC<PropsWithChildren<AuthButtonParams>>  = ({
         <TouchableOpacity 
             className={clsx(
                 className, 
-                'justify-center items-center py-3 px-4 m-1 rounded-full w-auto mx-8',
+                'justify-center items-center py-3 px-4 m-1 rounded-full w-auto',
                 isPrimary ? 'bg-green-base' : 'bg-gray-600'
              )}
              activeOpacity={0.8}
