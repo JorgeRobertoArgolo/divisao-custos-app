@@ -25,7 +25,7 @@ export const PrivateRoutes = () => {
                     elevation: 0,
                     paddingVertical: 20,
                     paddingHorizontal: 24,
-                    marginBottom: 24
+                    marginBottom: 24,
                 },
                 tabBarActiveTintColor: colors['green-base'],
                 tabBarInactiveTintColor: colors.gray[400],
