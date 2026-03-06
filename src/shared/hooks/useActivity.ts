@@ -17,29 +17,6 @@ export const useActivity = () => {
     const { handleError } = useErrorHandler();
     const { notify } = useSnackbarContext();
 
-    const addActivity = async (data: ActivityRequestDTO) => {
-        setIsLoading(true);
-
-        try {
-            //Adiciona a nova tarefa a lista
-            const newActivity = await activityService.createActivity(data);
-            setActivities(prev => [...prev, newActivity]);
-
-            notify({
-                message: 'Atividade criada com sucesso!',
-                messageType: 'SUCCESS'
-            });
-            //Retorna true para fechar o modal
-            return true;
-        } catch (error) {
-            handleError(error, 'Erro ao criar atividade. Tente novamente!');
-            return false;
-        } finally {
-            setIsLoading(false);
-        }
-    }
-
-
     const fetchActivities = useCallback( async (isRefresh = false) => {
         try {
             if (isRefresh) {
@@ -47,7 +24,7 @@ export const useActivity = () => {
                 setPage(0);
                 setHasMore(true);
             } else {
-                if (!hasMore || isLoadingMore) {
+                if (!hasMore || isLoadingMore || isLoading) {
                     return;
                 }
                 setIsLoadingMore(true);
@@ -73,13 +50,36 @@ export const useActivity = () => {
             setIsLoading(false);
             setIsLoadingMore(false);
         }
-    }, [page, hasMore, isLoadingMore]);
+    }, [page, hasMore, isLoadingMore, isLoading]);
 
+    const addActivity = async (data: ActivityRequestDTO) => {
+        setIsLoading(true);
+
+        try {
+            await activityService.createActivity(data);
+            //Recarrega página
+            await fetchActivities(true);
+
+            notify({
+                message: 'Atividade criada com sucesso!',
+                messageType: 'SUCCESS'
+            });
+            //Retorna true para fechar o modal
+            return true;
+        } catch (error) {
+            handleError(error, 'Erro ao criar atividade. Tente novamente!');
+            return false;
+        } finally {
+            setIsLoading(false);
+        }
+    }
 
     const deleteActivity = async(data: ActivityDeleteRequestDTO) => {
         try {
             await activityService.deleteActivity(data);
-            setActivities(prev => prev.filter(item => item.id !== data.id));
+
+            await fetchActivities(true);
+
             notify({
                 message: 'Atividade excluída!',
                 messageType: 'SUCCESS',

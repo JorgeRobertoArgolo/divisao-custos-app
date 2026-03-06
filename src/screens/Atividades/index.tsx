@@ -1,26 +1,14 @@
-import { FlatList, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import { MainHeader } from "@/components/MainHeader";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { EmptyList } from "./EmptyList";
 import { FloatingButton } from "@/components/FloatingButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddNewAtividadeModal } from "./AddNewAtividadeModal";
 import { useActivity } from "@/shared/hooks/useActivity";
 import { ActivityRequestDTO } from "@/interfaces/activity/request/activity-request-dto";
 import { ActivityCard } from "./ActivityCard";
-
-const testList = [
-    {
-        id: '123',
-        title: 'Teste',
-        date: '2026-05-09'
-    },
-    {
-        id: '124',
-        title: 'Teste 2',
-        date: '2026-06-19'
-    },
-]
+import { colors } from "@/shared/colors";
 
 export const Atividades = () => {
 
@@ -29,7 +17,13 @@ export const Atividades = () => {
     const showModal = () => setModalVisible(true);
     const hideModal = () => setModalVisible(false);
 
-    const { isLoading, addActivity } = useActivity();
+    const { isLoading, addActivity, fetchActivities, activities, isLoadingMore  } = useActivity();
+
+    //Busca atividades, assim que abre a tela
+    useEffect(() => {
+        //Define o refresh com true, para retorna a página 0
+        fetchActivities(true);
+    }, []);
 
     const handleSaveActivity = async (data: ActivityRequestDTO) => {
         const result = await addActivity(data);
@@ -60,10 +54,16 @@ export const Atividades = () => {
                 
                 <FlatList
                     contentContainerStyle={{ flexGrow: 1}}
-                    data={testList}
+                    showsVerticalScrollIndicator={false}
+                    data={activities}
                     keyExtractor={({id}) => `activity-${id}`}
-                    renderItem={({item}) => <ActivityCard />}
+                    renderItem={({item}) => <ActivityCard data={item} />}
                     ListEmptyComponent={<EmptyList />}
+                    onEndReached={() => fetchActivities()}
+                    onEndReachedThreshold={0.2}
+                    ListFooterComponent={
+                        isLoadingMore ? <ActivityIndicator color={colors["green-base"]} className="my-4" size={"small"} /> : null
+                    }
                 />
                 
                 <FloatingButton iconName="add" onPress={() => showModal()}>
