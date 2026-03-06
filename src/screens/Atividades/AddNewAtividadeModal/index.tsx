@@ -5,7 +5,7 @@ import { AuthButton } from "@/components/AuthButton";
 import { colors } from "@/shared/colors";
 import { Input } from "@/components/Input";
 import { useForm } from "react-hook-form";
-import { AtividadeRequestDTO } from "@/interfaces/atividade/request/atividade-request-dto";
+import { ActivityRequestDTO } from "@/interfaces/activity/request/activity-request-dto";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "./schema";
 import { InputDate } from "./InputDate";
@@ -13,22 +13,23 @@ import { InputDate } from "./InputDate";
 interface Params {
     visible: boolean;
     hideModal: () => void;
-    handleAddNewAtividade: () => void;
     loading: boolean;
+    handleAddNewActivity: (data: ActivityRequestDTO) => void;
 }
 
 export const AddNewAtividadeModal: FC<Params> = ({
-    handleAddNewAtividade,
     hideModal,
     loading,
-    visible
+    visible,
+    handleAddNewActivity
 }) => {
 
     const {
         control,
         handleSubmit,
-        formState: { isSubmitting }
-    } = useForm<AtividadeRequestDTO>({
+        formState: { isSubmitting },
+        reset 
+    } = useForm<ActivityRequestDTO>({
         defaultValues: {
             title: '',
             date: new Date(),
@@ -69,9 +70,15 @@ export const AddNewAtividadeModal: FC<Params> = ({
                                 </View>
 
                                 <AuthButton
-                                    onPress={handleAddNewAtividade}
+                                    onPress={
+                                        handleSubmit((data) => {
+                                            handleAddNewActivity(data);
+                                            reset();
+                                        })
+                                    }
+                                    disabled={isSubmitting || loading}
                                 >
-                                    {loading ? <ActivityIndicator /> : 'Salvar'}
+                                    {loading || isSubmitting ? <ActivityIndicator color={colors.white}/> : 'Salvar'}
                                 </AuthButton>
                             </View>
                         </TouchableWithoutFeedback>

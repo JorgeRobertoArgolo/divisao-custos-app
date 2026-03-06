@@ -5,16 +5,26 @@ import { EmptyList } from "./EmptyList";
 import { FloatingButton } from "@/components/FloatingButton";
 import { useState } from "react";
 import { AddNewAtividadeModal } from "./AddNewAtividadeModal";
+import { useActivity } from "@/shared/hooks/useActivity";
+import { ActivityRequestDTO } from "@/interfaces/activity/request/activity-request-dto";
 
 export const Atividades = () => {
 
-    const [loading, setLoading] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     
     const showModal = () => setModalVisible(true);
     const hideModal = () => setModalVisible(false);
 
-    const handleAddNewAtividade = () => {}
+    const { isLoading, addActivity } = useActivity();
+
+    const handleSaveActivity = async (data: ActivityRequestDTO) => {
+        const result = await addActivity(data);
+        
+        if (result) {
+            hideModal();
+        }
+
+    }
 
     return (
         <SafeAreaView className="bg-gray-700 flex-1 " edges={['top']}>
@@ -41,9 +51,9 @@ export const Atividades = () => {
             </View>
 
             <AddNewAtividadeModal 
-                handleAddNewAtividade={handleAddNewAtividade}
+                handleAddNewActivity={handleSaveActivity}
                 hideModal={hideModal}
-                loading={loading}
+                loading={isLoading}
                 visible={modalVisible}   
             />
         </SafeAreaView>
