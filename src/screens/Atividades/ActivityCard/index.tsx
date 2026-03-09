@@ -1,6 +1,7 @@
 import { ActivityResponseDTO } from "@/interfaces/activity/response/activity-response-dto";
 import { AtividadeStackParamsList } from "@/routes/PrivateRoutes";
 import { colors } from "@/shared/colors";
+import { formatDate } from "@/shared/utils/date-mapper";
 import { MaterialIcons } from "@expo/vector-icons";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { Text, TouchableOpacity, View } from "react-native";
@@ -32,7 +33,7 @@ export const ActivityCard = ({ data }: Params) => {
                 <View className="border-t border-solid border-gray-600 flex-row gap-3 justify-between pt-4">
                     <View className="flex-row">
                             <MaterialIcons name="calendar-today" size={16} color={colors.gray[400]}/>
-                            <Text className="font-inter text-gray-400 text-sm ml-2">{data.date}</Text>
+                            <Text className="font-inter text-gray-400 text-sm ml-2">{formatDate(new Date(data.date))}</Text>
                     </View>
                     <View className="flex-row">
                             <MaterialIcons name="people-outline" size={16} color={colors.gray[400]}/>
