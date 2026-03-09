@@ -1,15 +1,27 @@
 import { ActivityResponseDTO } from "@/interfaces/activity/response/activity-response-dto";
+import { AtividadeStackParamsList } from "@/routes/PrivateRoutes";
 import { colors } from "@/shared/colors";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Text, View } from "react-native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 interface Params {
     data: ActivityResponseDTO;
 }
 
 export const ActivityCard = ({ data }: Params) => {
+
+    const navigation = useNavigation<NavigationProp<AtividadeStackParamsList>>();
+
+    const handleOpenDespesas = () => {
+        navigation.navigate('Despesas', {
+            activityId: data.id,
+            activityTitle: data.title,
+        });
+    }
+
     return (
-        <View className="rounded-2xl bg-gray-700 mb-2">
+        <TouchableOpacity className="rounded-2xl bg-gray-700 mb-2" activeOpacity={0.8} onPress={handleOpenDespesas}>
             <View className="m-4">
                 <View className="flex-row justify-between mb-3">
                     <Text className="text-gray-100 font-inter text-md font-semibold">{data.title}</Text>
@@ -31,6 +43,6 @@ export const ActivityCard = ({ data }: Params) => {
                     </View>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 }

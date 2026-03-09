@@ -1,18 +1,40 @@
 import { Atividades } from '@/screens/Atividades';
+import { Despesas } from '@/screens/Despesas';
 import { Participantes } from '@/screens/Participantes';
 import { Resumo } from '@/screens/Resumo';
 import { colors } from '@/shared/colors';
 import { MaterialIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
+
+export type AtividadeStackParamsList = {
+    AtividadesList: undefined;
+    Despesas: { activityId: string, activityTitle: string };  
+}
+const AtividadeStack = createStackNavigator<AtividadeStackParamsList>();
+
+const AtividadesStackRoutes = () => {
+    return (
+        <AtividadeStack.Navigator
+            screenOptions={{
+                headerShown: false,
+            }}
+        >
+            <AtividadeStack.Screen name='AtividadesList' component={Atividades}/>
+            <AtividadeStack.Screen name='Despesas' component={Despesas}/>
+        </AtividadeStack.Navigator>
+    );
+}
 
 export type PrivateBottomTabsParamsList = {
-    Atividades: undefined;
+    AtividadesTab: undefined;
     Resumo: undefined;
     Participantes: undefined;
 }
 
+const PrivateBottomTabs = createBottomTabNavigator<PrivateBottomTabsParamsList>();
+
 export const PrivateRoutes = () => {
-    const PrivateBottomTabs = createBottomTabNavigator<PrivateBottomTabsParamsList>();
 
     return (
         <PrivateBottomTabs.Navigator
@@ -40,12 +62,13 @@ export const PrivateRoutes = () => {
                     paddingTop: 4,
                 },
             }}    
-            initialRouteName='Atividades'
+            initialRouteName='AtividadesTab'
         >
             <PrivateBottomTabs.Screen 
-                name='Atividades'
-                component={Atividades}
+                name='AtividadesTab'
+                component={AtividadesStackRoutes}
                 options={{
+                    tabBarLabel: 'Atividades',
                     tabBarIcon: ({ color }) => (
                         <MaterialIcons name='list' size={24} color={color}/>
                     )
