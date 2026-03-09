@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { useCallback, useRef, useState } from "react"
 import { useErrorHandler } from "./useErrorHandler";
 import { useSnackbarContext } from "@/context/snackbar.context";
 import { ActivityRequestDTO } from "@/interfaces/activity/request/activity-request-dto";
@@ -14,17 +14,28 @@ export const useActivity = () => {
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
 
+    const isFetchingRef = useRef(false);
+
     const { handleError } = useErrorHandler();
     const { notify } = useSnackbarContext();
 
     const fetchActivities = useCallback( async (isRefresh = false) => {
+
+        if (isFetchingRef.current) {
+            return;
+        }
+
         try {
+
+            isFetchingRef.current = true;
+
             if (isRefresh) {
                 setIsLoading(true);
                 setPage(0);
                 setHasMore(true);
             } else {
                 if (!hasMore || isLoadingMore || isLoading) {
+                    isFetchingRef.current = false;
                     return;
                 }
                 setIsLoadingMore(true);
@@ -49,8 +60,9 @@ export const useActivity = () => {
         } finally {
             setIsLoading(false);
             setIsLoadingMore(false);
+            isFetchingRef.current = false;
         }
-    }, [page, hasMore, isLoadingMore, isLoading]);
+    }, [page, hasMore]);
 
     const addActivity = async (data: ActivityRequestDTO) => {
         setIsLoading(true);
