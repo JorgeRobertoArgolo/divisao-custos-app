@@ -1,7 +1,12 @@
-import { View } from "react-native";
+import { Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export const Resumo = () => {
     return (
-        <View>Tela de Resumo</View>
+        <SafeAreaView className="bg-gray-800 flex-1 " edges={['top']}>
+            <View className="flex-1 items-center justify-center">
+                <Text className="text-white">Tela de Resumo</Text>
+            </View>
+        </SafeAreaView>
     );
 }
