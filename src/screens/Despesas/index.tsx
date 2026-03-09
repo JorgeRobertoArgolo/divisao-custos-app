@@ -4,12 +4,18 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { DespesasEmptyList } from "./EmptyList";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { NavigationProp, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { AtividadeStackParamsList } from "@/routes/PrivateRoutes";
+import { formatDate } from "@/shared/utils/date-mapper";
+
+type DespesasRouteProp = RouteProp<AtividadeStackParamsList, 'Despesas'>;
 
 export const Despesas = () => {
 
     const navigation = useNavigation<NavigationProp<AtividadeStackParamsList>>();
+
+    const route = useRoute<DespesasRouteProp>();
+    const { activityDate, activityId, activityTitle } = route.params;
 
     return (
         <SafeAreaView className="bg-gray-800 flex-1 " edges={['top']}>
@@ -27,11 +33,11 @@ export const Despesas = () => {
                         
                         <View>
                             <Text className="text-gray-100 font-inter text-lg-heading font-semibold mb-1">
-                                title
+                                {activityTitle}
                             </Text>
                             <View className="flex-row">
                                 <MaterialIcons name="calendar-today" size={16} color={colors.gray[300]} />
-                                <Text className="ml-2 text-sm font-inter text-gray-300">date</Text>
+                                <Text className="ml-2 text-sm font-inter text-gray-300">{formatDate(new Date(activityDate))}</Text>
                             </View>
                         </View>
                     </View>

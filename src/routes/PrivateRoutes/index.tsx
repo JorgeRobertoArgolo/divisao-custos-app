@@ -9,7 +9,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 export type AtividadeStackParamsList = {
     AtividadesList: undefined;
-    Despesas: { activityId: string, activityTitle: string };  
+    Despesas: { activityId: string, activityTitle: string, activityDate: string };  
 }
 const AtividadeStack = createStackNavigator<AtividadeStackParamsList>();
 

@@ -17,6 +17,7 @@ export const ActivityCard = ({ data }: Params) => {
         navigation.navigate('Despesas', {
             activityId: data.id,
             activityTitle: data.title,
+            activityDate: data.date
         });
     }
 
