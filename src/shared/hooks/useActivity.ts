@@ -5,6 +5,7 @@ import { ActivityRequestDTO } from "@/interfaces/activity/request/activity-reque
 import * as activityService from '@/shared/services/activity.service'
 import { ActivityDeleteRequestDTO } from "@/interfaces/activity/request/activity-delete-dto";
 import { ActivityResponseDTO } from "@/interfaces/activity/response/activity-response-dto";
+import { ActivityUpdateRequestDTO } from "@/interfaces/activity/request/activity-update-request-dto";
 
 export const useActivity = () => {
     const [activities, setActivities] = useState<ActivityResponseDTO[]>([]);
@@ -86,6 +87,28 @@ export const useActivity = () => {
         }
     }
 
+    const updateActivity = async (data: ActivityUpdateRequestDTO) => {
+        setIsLoading(true);
+
+        try {
+            await activityService.updateActivity(data);
+            //Recarrega página
+            await fetchActivities(true);
+
+            notify({
+                message: 'Atividade atualizada com sucesso com sucesso!',
+                messageType: 'SUCCESS'
+            });
+            //Retorna true para fechar o modal
+            return true;
+        } catch (error) {
+            handleError(error, 'Erro ao atualizar atividade. Tente novamente!');
+            return false;
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
     const deleteActivity = async(data: ActivityDeleteRequestDTO) => {
         try {
             await activityService.deleteActivity(data);
@@ -107,6 +130,7 @@ export const useActivity = () => {
         isLoadingMore,
         addActivity,
         fetchActivities,
-        deleteActivity
+        deleteActivity,
+        updateActivity,
     }
 }    

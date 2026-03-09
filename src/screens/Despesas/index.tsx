@@ -7,6 +7,11 @@ import { DespesasEmptyList } from "./EmptyList";
 import { NavigationProp, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { AtividadeStackParamsList } from "@/routes/PrivateRoutes";
 import { formatDate } from "@/shared/utils/date-mapper";
+import { useActivity } from "@/shared/hooks/useActivity";
+import { ActivityUpdateRequestDTO } from "@/interfaces/activity/request/activity-update-request-dto";
+import { useState } from "react";
+import { UpdateAtividadeModal } from "./UpdateAtividadeModal";
+import { ActivityRequestDTO } from "@/interfaces/activity/request/activity-request-dto";
 
 type DespesasRouteProp = RouteProp<AtividadeStackParamsList, 'Despesas'>;
 
@@ -16,6 +21,28 @@ export const Despesas = () => {
 
     const route = useRoute<DespesasRouteProp>();
     const { activityDate, activityId, activityTitle } = route.params;
+
+    const [modalVisible, setModalVisible] = useState(false);
+    const showModal = () => setModalVisible(true);
+    const hideModal = () => setModalVisible(false);
+
+    const { updateActivity, isLoading } = useActivity();
+
+    const handleUpdateActivity = async (data: ActivityRequestDTO) => {
+        const updateData: ActivityUpdateRequestDTO = {
+            id: activityId,
+            title: data.title,
+            date: data.date,
+        }
+        const result = await updateActivity(updateData);
+        if (result) {
+            navigation.setParams({
+                activityTitle: data.title,
+                activityDate: data.date.toISOString(),
+            });
+            hideModal();
+        }
+    }
 
     return (
         <SafeAreaView className="bg-gray-800 flex-1 " edges={['top']}>
@@ -41,7 +68,10 @@ export const Despesas = () => {
                             </View>
                         </View>
                     </View>
-                    <TouchableOpacity className="items-center justify-center gap-3 rounded-full border border-solid border-gray-500 bg-gray-600 h-16 w-16">
+                    <TouchableOpacity 
+                        className="items-center justify-center gap-3 rounded-full border border-solid border-gray-500 bg-gray-600 h-16 w-16"
+                        onPress={() => showModal()}    
+                    >
                         <MaterialIcons name="mode-edit-outline" size={24} color={colors.gray[300]} />
                     </TouchableOpacity>
                 </View>
@@ -49,6 +79,15 @@ export const Despesas = () => {
                 <DespesasEmptyList />
 
             </View>
+
+            <UpdateAtividadeModal 
+                handleUpdateActivity={handleUpdateActivity}
+                hideModal={hideModal}
+                loading={isLoading}
+                visible={modalVisible}
+                initialTitle={activityTitle}
+                initialDate={activityDate}
+            />
         </SafeAreaView>
     );
 }

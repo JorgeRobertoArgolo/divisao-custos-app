@@ -3,12 +3,13 @@ import { MainHeader } from "@/components/MainHeader";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { EmptyList } from "./EmptyList";
 import { FloatingButton } from "@/components/FloatingButton";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AddNewAtividadeModal } from "./AddNewAtividadeModal";
 import { useActivity } from "@/shared/hooks/useActivity";
 import { ActivityRequestDTO } from "@/interfaces/activity/request/activity-request-dto";
 import { ActivityCard } from "./ActivityCard";
 import { colors } from "@/shared/colors";
+import { useFocusEffect } from "@react-navigation/native";
 
 export const Atividades = () => {
 
@@ -24,6 +25,13 @@ export const Atividades = () => {
         //Define o refresh com true, para retorna a página 0
         fetchActivities(true);
     }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            // Dispara o refresh sempre que o usuário "entrar" ou "voltar" para essa tela
+            fetchActivities(true);
+        }, [])
+    )
 
     const handleSaveActivity = async (data: ActivityRequestDTO) => {
         const result = await addActivity(data);
