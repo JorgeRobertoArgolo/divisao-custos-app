@@ -1,12 +1,15 @@
-import { Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ParticipantesEmptyList } from "./ParticipantesEmptyList";
 import { MainHeader } from "@/components/MainHeader";
 import { FloatingButton } from "@/components/FloatingButton";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParticipants } from "@/shared/hooks/useParticipants";
 import { ParticipantsRequestDTO } from "@/interfaces/participants/request/participants-request-dto";
 import { AddNewParticipantsModal } from "./AddNewParticipantsModal";
+import { useFocusEffect } from "@react-navigation/native";
+import { colors } from "@/shared/colors";
+import { ParticipantsCard } from "./ParticipantsCard";
 
 export const Participantes = () => {
 
@@ -15,7 +18,17 @@ export const Participantes = () => {
     const showModal = () => setModalVisible(true);
     const hideModal = () => setModalVisible(false);
 
-    const { isLoading, addParticipants }= useParticipants();
+    const { isLoading, addParticipants, fetchParticipants, participants, isLoadingMore } = useParticipants();
+
+    useEffect(() => {
+        fetchParticipants(true);
+    }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            fetchParticipants(true);
+        }, [])
+    );
 
     const handleSaveParticipants = async (data: ParticipantsRequestDTO) => {
         const result = await addParticipants(data);
@@ -43,7 +56,19 @@ export const Participantes = () => {
                     </Text>
                 </View>
 
-                <ParticipantesEmptyList />
+                <FlatList 
+                    contentContainerStyle={{flexGrow: 1}}
+                    showsVerticalScrollIndicator={false}
+                    data={participants}
+                    keyExtractor={({id}) => `participants-${id}`}
+                    renderItem={({item}) => <ParticipantsCard data={item} />}
+                    ListEmptyComponent={<ParticipantesEmptyList />}
+                    onEndReached={() => fetchParticipants()}
+                    onEndReachedThreshold={0.2}
+                    ListFooterComponent={
+                        isLoadingMore ? <ActivityIndicator color={colors["green-base"]} className="my-4" size={"small"} /> : null
+                    }
+                />
 
                 <FloatingButton iconName="add" onPress={() => showModal()}>
                     Criar

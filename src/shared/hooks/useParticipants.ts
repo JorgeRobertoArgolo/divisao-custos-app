@@ -1,5 +1,5 @@
 import { ParticipantsResponseDTO } from "@/interfaces/participants/response/participants-response-dto"
-import { useRef, useState } from "react"
+import { useCallback, useRef, useState } from "react"
 import { useErrorHandler } from "./useErrorHandler";
 import { useSnackbarContext } from "@/context/snackbar.context";
 import { ParticipantsRequestDTO } from "@/interfaces/participants/request/participants-request-dto";
@@ -18,11 +18,58 @@ export const useParticipants = () => {
     const { handleError } = useErrorHandler();
     const { notify } = useSnackbarContext();
 
+    const fetchParticipants = useCallback( async (isRefresh = false) => {
+        
+        if (isFetchingRef.current) {
+            return;
+        }
+
+        try {
+            isFetchingRef.current = true;
+
+            if (isRefresh) {
+                setIsLoading(true);
+                setPage(0);
+                setHasMore(true);
+            } else {
+                if (!hasMore || isLoadingMore || isLoading) {
+                    isFetchingRef.current = false;
+                    return;
+                }
+                setIsLoadingMore(true);
+            }
+
+            const currentPage = isRefresh ? 0 : page;
+
+            const data = await participantsService.getParticipants(currentPage, 15);
+
+            if (data.length < 15) {
+                setHasMore(false);
+            }
+
+            if (isRefresh) {
+                setParticipants(data);
+            } else {
+                setParticipants(prev => [...prev, ...data]);
+            }
+            setPage(currentPage + 1);
+        } catch (error) {
+            handleError(error, 'Erro ao carregar participantes')
+        } finally {
+            setIsLoading(false);
+            setIsLoadingMore(false);
+            isFetchingRef.current= false;
+        }
+
+    }, [page, hasMore]);
+
     const addParticipants = async (data: ParticipantsRequestDTO) => {
         setIsLoading(true);
 
         try {
             await participantsService.createParticipants(data);
+
+            await fetchParticipants(true);
 
             notify({
                 message: 'Participante criado com sucesso!',
@@ -43,5 +90,6 @@ export const useParticipants = () => {
         isLoading,
         isLoadingMore,
         addParticipants,
+        fetchParticipants
     }
 }
