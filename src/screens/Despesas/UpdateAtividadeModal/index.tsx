@@ -1,7 +1,7 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { ActivityIndicator, Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { AuthButton } from "@/components/AuthButton";
+import { AppButton } from "@/components/AppButton";
 import { colors } from "@/shared/colors";
 import { Input } from "@/components/Input";
 import { useForm } from "react-hook-form";
@@ -9,12 +9,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "./schema";
 import { InputDate } from "@/components/InputDate";
 import { ActivityRequestDTO } from "@/interfaces/activity/request/activity-request-dto";
+import { ActivityDeleteRequestDTO } from "@/interfaces/activity/request/activity-delete-dto";
 
 interface Params {
     visible: boolean;
     hideModal: () => void;
     loading: boolean;
     handleUpdateActivity: (data: ActivityRequestDTO) => void;
+    handleDeleteActivity: () => void;
     initialTitle: string;
     initialDate: string;
 }
@@ -24,9 +26,12 @@ export const UpdateAtividadeModal: FC<Params> = ({
     loading,
     visible,
     handleUpdateActivity,
+    handleDeleteActivity,
     initialTitle,
     initialDate
 }) => {
+
+    const [currentAction, setCurrentAction] = useState<'update' | 'delete' | null>(null);
 
     const {
         control,
@@ -43,12 +48,15 @@ export const UpdateAtividadeModal: FC<Params> = ({
     
     useEffect(() => {
         if (visible) {
+            setCurrentAction(null);
             reset({
                 title: initialTitle,
                 date: new Date(initialDate)
             });
         }
     }, [visible, initialTitle, initialDate, reset]);
+
+    const isWorking = isSubmitting || loading;
 
     return (
         <View className="flex-1 absolute">
@@ -82,16 +90,40 @@ export const UpdateAtividadeModal: FC<Params> = ({
                                     />
                                 </View>
 
-                                <AuthButton
-                                    onPress={
-                                        handleSubmit((data) => {
-                                            handleUpdateActivity(data);
-                                        })
-                                    }
-                                    disabled={isSubmitting || loading}
-                                >
-                                    {loading || isSubmitting ? <ActivityIndicator color={colors.white}/> : 'Salvar'}
-                                </AuthButton>
+                                <View className="flex-row justify-between">
+                                    <AppButton
+                                        onPress={
+                                            handleSubmit(() => {
+                                                setCurrentAction("delete")
+                                                handleDeleteActivity();
+                                            })
+                                        }   
+                                        disabled={isWorking}
+                                        type="secondary"
+                                    >
+                                        {isWorking && currentAction === 'delete' ? (
+                                            <ActivityIndicator color={colors["danger-light"]} />
+                                        ) : (
+                                            <MaterialIcons name="delete-outline" size={24} color={colors["danger-light"]} />
+                                        )}
+                                    </AppButton>
+
+                                    <AppButton
+                                        onPress={
+                                            handleSubmit((data) => {
+                                                setCurrentAction('update');
+                                                handleUpdateActivity(data);
+                                            })
+                                        }
+                                        disabled={isWorking}
+                                    >
+                                        {isWorking && currentAction === 'update' ? (
+                                            <ActivityIndicator color={colors.white} />
+                                        ) : (
+                                            'Salvar'
+                                        )}
+                                    </AppButton>
+                                </View>
                             </View>
                         </TouchableWithoutFeedback>
                     </View>

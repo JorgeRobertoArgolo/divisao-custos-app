@@ -1,4 +1,4 @@
-import { AuthButton } from "@/components/AuthButton";
+import { AppButton } from "@/components/AppButton";
 import { colors } from "@/shared/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Text, TouchableOpacity, View } from "react-native";
@@ -26,7 +26,7 @@ export const Despesas = () => {
     const showModal = () => setModalVisible(true);
     const hideModal = () => setModalVisible(false);
 
-    const { updateActivity, isLoading } = useActivity();
+    const { updateActivity, isLoading, deleteActivity } = useActivity();
 
     const handleUpdateActivity = async (data: ActivityRequestDTO) => {
         const updateData: ActivityUpdateRequestDTO = {
@@ -41,6 +41,14 @@ export const Despesas = () => {
                 activityDate: data.date.toISOString(),
             });
             hideModal();
+        }
+    }
+
+    const handleDeleteActivity = async () => {
+        const result = await deleteActivity({id: activityId});
+        if (result) {
+            hideModal();
+            navigation.goBack();
         }
     }
 
@@ -82,6 +90,7 @@ export const Despesas = () => {
 
             <UpdateAtividadeModal 
                 handleUpdateActivity={handleUpdateActivity}
+                handleDeleteActivity={handleDeleteActivity}
                 hideModal={hideModal}
                 loading={isLoading}
                 visible={modalVisible}

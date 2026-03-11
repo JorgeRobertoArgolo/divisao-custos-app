@@ -6,7 +6,7 @@ import { Input } from "@/components/Input";
 import { schema } from "./schema";
 import { Text, View } from "react-native";
 import { AuthHeader } from "@/components/AuthHeader";
-import { AuthButton } from '@/components/AuthButton';
+import { AppButton } from '@/components/AppButton';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { PublicStackParamsList } from '@/routes/PublicRoutes';
 import { UserRegisterRequestDTO } from '@/interfaces/auth/request/user-register-request-dto';
@@ -75,9 +75,9 @@ export const RegisterForm = () => {
                     />
                 </View>
 
-                <AuthButton className='my-8' onPress={handleSubmit(onSubmit)} disabled={isSubmitting}>
+                <AppButton className='my-8' onPress={handleSubmit(onSubmit)} disabled={isSubmitting}>
                     Cadastrar
-                </AuthButton>
+                </AppButton>
 
                 <View className='border-t-gray-600 border-t w-auto mx-8' />
                 
@@ -85,9 +85,9 @@ export const RegisterForm = () => {
                     Já tem cadastro ?
                 </Text>
 
-                <AuthButton className='mb-10' type='secondary' onPress={() => navigation.navigate('Login')}>
+                <AppButton className='mb-10' type='secondary' onPress={() => navigation.navigate('Login')}>
                     Entrar na Conta
-                </AuthButton>
+                </AppButton>
             </View> 
         </SafeAreaView> 
     );

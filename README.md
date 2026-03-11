@@ -42,7 +42,7 @@ O projeto segue princípios de Clean Architecture adaptados para o frontend:
 * `/src/services`: Funções isoladas para comunicação externa (ex: `auth.service.ts`).
 * `/src/context`: Gerenciamento de estado global (Auth, Snackbar).
 * `/src/shared`: Utilitários, hooks de formatação, paleta de cores e constantes.
-* `/src/components`: Componentes visuais burros e reutilizáveis (`Input`, `AuthButton`, `MainHeader`).
+* `/src/components`: Componentes visuais burros e reutilizáveis (`Input`, `AppButton`, `MainHeader`).
 * `/src/screens`: Páginas completas montando os fluxos de navegação.
 
 ## ⚙️ Como rodar o projeto

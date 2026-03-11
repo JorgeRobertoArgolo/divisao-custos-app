@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { ActivityIndicator, Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { AuthButton } from "@/components/AuthButton";
+import { AppButton } from "@/components/AppButton";
 import { colors } from "@/shared/colors";
 import { Input } from "@/components/Input";
 import { useForm } from "react-hook-form";
@@ -69,7 +69,7 @@ export const AddNewAtividadeModal: FC<Params> = ({
                                     />
                                 </View>
 
-                                <AuthButton
+                                <AppButton
                                     onPress={
                                         handleSubmit((data) => {
                                             handleAddNewActivity(data);
@@ -79,7 +79,7 @@ export const AddNewAtividadeModal: FC<Params> = ({
                                     disabled={isSubmitting || loading}
                                 >
                                     {loading || isSubmitting ? <ActivityIndicator color={colors.white}/> : 'Salvar'}
-                                </AuthButton>
+                                </AppButton>
                             </View>
                         </TouchableWithoutFeedback>
                     </View>

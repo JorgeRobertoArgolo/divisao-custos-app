@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { AuthButton } from "@/components/AuthButton";
+import { AppButton } from "@/components/AppButton";
 import { colors } from "@/shared/colors";
 
 export const DespesasEmptyList = () => {
@@ -12,9 +12,9 @@ export const DespesasEmptyList = () => {
                 Para começar a dividir, registre uma despesa
             </Text>
             
-            <AuthButton>
+            <AppButton>
                 Nova Despesa
-            </AuthButton>
+            </AppButton>
         </View>
     );
 }

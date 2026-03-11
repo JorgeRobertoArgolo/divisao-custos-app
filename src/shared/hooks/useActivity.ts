@@ -119,8 +119,11 @@ export const useActivity = () => {
                 message: 'Atividade excluída!',
                 messageType: 'SUCCESS',
             });
+
+            return true;
         } catch (error) {
             handleError(error, 'Error ao excluir atividade');
+            return false;
         }
     }
 
